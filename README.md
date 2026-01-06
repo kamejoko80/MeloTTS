@@ -164,6 +164,85 @@ python3 convert.py --onnx models/encoder.onnx --out models/encoder.rknn --target
 python3 convert.py --onnx models/decoder.onnx --out models/decoder.rknn --target rk3588 --opt 3 --fp16 --verbose
 ```
 
+## Setup on RK3588:
+
+```bash
+mkdir MeloTTS
+git clone https://github.com/kamejoko80/MeloTTS.git
+cd MeloTTS
+git checkout henry_rk3588
+cd ..
+cp MeloTTS/scripts/sh/Miniforge3-25.11.0-0-Linux-aarch64.sh ./
+```
+
+Run bash Miniforge3-25.11.0-0-Linux-aarch64.sh and install in path = $PWD/env
+
+Every time we open a new console we must activate the env:
+
+```bash
+source env/bin/activate
+```
+
+Create a Conda environment named "RKNN-Toolkit2" with Python 3.10 version:
+
+```bash
+conda create -n RKNN-Toolkit2 python=3.10
+```
+
+Activate RKNN-Toolkit2:
+
+```bash
+> conda activate RKNN-Toolkit2
+```
+
+To deactivate:
+
+```bash
+> conda deactivate
+```
+
+Install RKNN-Toolkit2 & MeloTTS:
+
+```bash
+pip install rknn-toolkit-lite2
+cd MeloTTS
+pip install -e .
+python -m unidic download
+```
+
+Run the bellow script to download nltk resource:
+
+```bash
+python - <<'PY'
+import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('averaged_perceptron_tagger_eng')
+PY
+```
+
+Test torch inference:
+
+```bash
+cd MeloTTS/scripts
+python test_torch.py
+```
+
+Test MeloTTS with RKNN accelerator:
+
+Copy "encoder.rknn" & "decoder.rknn" from the Linux x86 PC into the MeloTTS/scripts/models folder, then run:
+
+```bash
+python3 test_melo_tts_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Hello world. RTF measurement on RK3588." --speed 1.1 --warmup 2 --speaker-id 1 --out rk3588_rtf.wav
+```
+
 
 ## Authors
 
