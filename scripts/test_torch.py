@@ -5,7 +5,7 @@ speed = 1.0
 
 # CPU is sufficient for real-time inference.
 # You can set it manually to 'cpu' or 'cuda' or 'cuda:0' or 'mps'
-device = 'cuda' # Will automatically use GPU if available
+device = 'cpu' # Will automatically use GPU if available
 
 # English 
 text = "Did you ever hear a folk tale about a giant turtle?"
