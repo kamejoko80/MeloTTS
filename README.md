@@ -44,7 +44,7 @@ mkdir MeloTTS_RK3588
 cd MeloTTS_RK3588
 python3 -m venv env
 source env/bin/activate
-pip install onnx onnxruntime
+pip install onnx onnxruntime onnxscript
 ```
 
 ```bash
