@@ -37,6 +37,134 @@ If you find this work useful, please consider contributing to this repo.
 
 - Many thanks to [@fakerybakery](https://github.com/fakerybakery) for adding the Web UI and CLI part.
 
+## Build guideline (on Linux x86 desktop PC):
+
+```bash
+mkdir MeloTTS_RK3588
+cd MeloTTS_RK3588
+python3 -m venv env
+source env/bin/activate
+pip install onnx onnxruntime
+```
+
+```bash
+git clone git@github.com:kamejoko80/MeloTTS.git
+git checkout henry_rk3588
+cd ..
+```
+
+Install MeloTTS:
+
+```bash
+cd MeloTTS
+pip install -e .
+python -m unidic download
+```
+
+Run the bellow script to download nltk resource:
+
+```bash
+python - <<'PY'
+import nltk
+import ssl
+
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
+
+nltk.download('averaged_perceptron_tagger_eng')
+PY
+```
+
+Test torch inference:
+
+```bash
+cd MeloTTS/scripts
+python test_torch.py
+```
+
+Export decoder:
+
+```bash
+python3 export_decoder.py --language EN --device cpu --T 128 --out models/decoder.onnx
+```
+
+Test decoder:
+
+```bash
+python3 test_decoder.py --decoder models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx onnx_decoder.wav
+```
+
+Export encoder:
+
+```bash
+python3 export_encoder.py --language EN --L 128 --device cpu --out models/encoder.onnx
+```
+
+Test encoder:
+
+```bash
+python3 test_encoder_decoder.py --encoder models/encoder.onnx --decoder models/decoder.onnx --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out onnx_encoder_decoder.wav
+```
+
+Install RKNN-Toolkit2:
+
+Must open a different linux terminal to install the RKNN-Toolkit2 on the Linux x86 desktop PC
+
+```bash
+cd MeloTTS_RK3588
+mkdir RKNN-Toolkit2
+cp MeloTTS/scripts/sh/Miniforge3-Linux-x86_64.sh ./RKNN-Toolkit2/Miniforge3-Linux-x86_64.sh
+cd RKNN-Toolkit2
+```
+
+Run bash Miniforge3-Linux-x86_64.sh (availabe in the repo's scripts folder) and install in path = $PWD/env
+
+Every time we open a new console we must activate the env:
+
+```bash
+source env/bin/activate
+```
+
+Create a Conda environment named "RKNN-Toolkit2" with Python 3.8 version:
+
+```bash
+conda create -n RKNN-Toolkit2 python=3.8
+```
+
+Activate RKNN-Toolkit2:
+
+```bash
+> conda activate RKNN-Toolkit2
+```
+
+To deactivate:
+
+```bash
+> conda deactivate
+```
+
+Install RKNN-Toolkit2 from github repo:
+
+```bash
+git clone https://github.com/airockchip/rknn-toolkit2.git
+cd rknn-toolkit2
+pip install -r rknn-toolkit2/packages/x86_64/requirements_cp38-2.3.2.txt
+pip install rknn-toolkit2/packages/x86_64/rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+```
+
+Covert ONNX to RKNN
+
+```bash
+cd MeloTTS/scripts
+python3 convert.py --onnx models/encoder.onnx --out models/encoder.rknn --target rk3588 --opt 3 --fp16 --verbose
+python3 convert.py --onnx models/decoder.onnx --out models/decoder.rknn --target rk3588 --opt 3 --fp16 --verbose
+```
+
+
 ## Authors
 
 - [Wenliang Zhao](https://wl-zhao.github.io) at Tsinghua University
