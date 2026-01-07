@@ -107,7 +107,7 @@ def decode_with_decoder_onnx(dec_sess, z_full: np.ndarray, g: np.ndarray, T: int
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--decoder", required=True, help="decoder.onnx")
+    ap.add_argument("--dec", required=True, help="decoder.onnx")
     ap.add_argument("--language", default="EN")
     ap.add_argument("--text", default="Hello world")
     ap.add_argument("--T", type=int, default=128)
@@ -194,7 +194,7 @@ def main():
     z_np = z.cpu().numpy().astype(np.float32)
     g_np = g.cpu().numpy().astype(np.float32)
 
-    dec_sess = ort.InferenceSession(args.decoder, providers=["CPUExecutionProvider"])
+    dec_sess = ort.InferenceSession(args.dec, providers=["CPUExecutionProvider"])
     y_onnx_1d = decode_with_decoder_onnx(dec_sess, z_np, g_np, int(args.T))
 
     sr = int(getattr(getattr(hps, "data", None), "sampling_rate", 44100))
@@ -213,7 +213,7 @@ def main():
     print("speaker_id:", speaker_id)
     print("z:", z_np.shape, "g:", g_np.shape, "T:", args.T)
     print("pytorch wav:", args.out_pytorch, "len:", len(y_pt_1d))
-    print("onnx wav:", args.out_onnx, "len:", len(y_onnx_1d))
+    print("onnx wav:", args.out, "len:", len(y_onnx_1d))
     print("RMSE (aligned):", rmse)
 
 

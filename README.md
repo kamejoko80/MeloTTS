@@ -95,7 +95,7 @@ python3 export_decoder.py --language EN --device cpu --T 128 --out models/decode
 Test decoder:
 
 ```bash
-python3 test_decoder.py --decoder models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx onnx_decoder.wav
+python3 test_decoder.py --dec models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx out.wav
 ```
 
 Export encoder:
@@ -104,10 +104,10 @@ Export encoder:
 python3 export_encoder.py --language EN --L 128 --device cpu --out models/encoder.onnx
 ```
 
-Test encoder:
+Test encoder/decoder:
 
 ```bash
-python3 test_encoder_decoder.py --encoder models/encoder.onnx --decoder models/decoder.onnx --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out onnx_encoder_decoder.wav
+python3 test_encoder_decoder.py --enc models/encoder.onnx --dec models/decoder.onnx --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out out.wav
 ```
 
 Export bert:
@@ -116,6 +116,11 @@ Export bert:
 python3 export_bert.py --seq 128 --out models/bert.onnx
 ```
 
+Test bert/encoder/decoder:
+
+```bash
+python3 test_bert_encoder_decoder.py --bert models/bert.onnx --enc models/encoder.onnx --dec models/decoder.onnx --bert-tokenizer bert-large-uncased --bert-seq 128 --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav --L 128 --speaker-id 1 --verbose
+```
 
 Install RKNN-Toolkit2:
 

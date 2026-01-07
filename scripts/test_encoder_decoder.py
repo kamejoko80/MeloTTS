@@ -163,8 +163,8 @@ class DecFromOnnx(torch.nn.Module):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--encoder", required=True)
-    ap.add_argument("--decoder", required=True)
+    ap.add_argument("--enc", required=True)
+    ap.add_argument("--dec", required=True)
     ap.add_argument("--language", default="EN")
     ap.add_argument("--text", required=True)
     ap.add_argument("--speed", type=float, default=1.0)
@@ -211,8 +211,8 @@ def main():
 
     g = model.emb_g(sid).unsqueeze(-1)
 
-    enc_sess = ort.InferenceSession(args.encoder, providers=["CPUExecutionProvider"])
-    dec_sess = ort.InferenceSession(args.decoder, providers=["CPUExecutionProvider"])
+    enc_sess = ort.InferenceSession(args.enc, providers=["CPUExecutionProvider"])
+    dec_sess = ort.InferenceSession(args.dec, providers=["CPUExecutionProvider"])
 
     orig_enc_p = model.enc_p
     orig_dec = model.dec
