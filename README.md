@@ -95,7 +95,7 @@ python3 export_decoder.py --language EN --device cpu --T 128 --out models/decode
 Test decoder:
 
 ```bash
-python3 test_decoder.py --dec models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx out.wav
+python3 test_decoder.py --dec models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx onnx_decoder.wav
 ```
 
 Export encoder:

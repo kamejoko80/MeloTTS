@@ -213,7 +213,7 @@ def main():
     print("speaker_id:", speaker_id)
     print("z:", z_np.shape, "g:", g_np.shape, "T:", args.T)
     print("pytorch wav:", args.out_pytorch, "len:", len(y_pt_1d))
-    print("onnx wav:", args.out, "len:", len(y_onnx_1d))
+    print("onnx wav:", args.out_onnx, "len:", len(y_onnx_1d))
     print("RMSE (aligned):", rmse)
 
 
