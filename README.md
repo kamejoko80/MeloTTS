@@ -89,37 +89,37 @@ python test_torch.py
 Export decoder:
 
 ```bash
-python3 export_decoder.py --language EN --device cpu --T 128 --out models/decoder.onnx
+python3 export_decoder.py --language EN --device cpu --T 256 --out models/decoder.onnx
 ```
 
 Test decoder:
 
 ```bash
-python3 test_decoder.py --dec models/decoder.onnx --language EN --text "Did you ever hear a folk tale about a giant turtle?" --T 128 --out-pytorch pytorch_ref.wav --out-onnx onnx_decoder.wav
+python3 test_decoder.py --dec models/decoder.onnx --language EN --T 256 --text "Did you ever hear a folk tale about a giant turtle?" --out-pytorch pytorch_ref.wav --out-onnx onnx_decoder.wav
 ```
 
 Export encoder:
 
 ```bash
-python3 export_encoder.py --language EN --L 128 --device cpu --out models/encoder.onnx
+python3 export_encoder.py --language EN --L 256 --device cpu --out models/encoder.onnx
 ```
 
 Test encoder/decoder:
 
 ```bash
-python3 test_encoder_decoder.py --enc models/encoder.onnx --dec models/decoder.onnx --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out out.wav
+python3 test_encoder_decoder.py --enc models/encoder.onnx --dec models/decoder.onnx --L 256 --chunk-T 256 --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out out.wav
 ```
 
 Export bert:
 
 ```bash
-python3 export_bert.py --seq 128 --out models/bert.onnx
+python3 export_bert.py --seq 256 --out models/bert.onnx
 ```
 
 Test bert/encoder/decoder:
 
 ```bash
-python3 test_bert_encoder_decoder.py --bert models/bert.onnx --enc models/encoder.onnx --dec models/decoder.onnx --bert-tokenizer bert-large-uncased --bert-seq 128 --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav --L 128 --speaker-id 1 --verbose
+python3 test_bert_encoder_decoder.py --bert models/bert.onnx --enc models/encoder.onnx --dec models/decoder.onnx --bert-tokenizer bert-large-uncased --bert-seq 256 --L 256 --chunk-T 256 --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav --speaker-id 1 --verbose
 ```
 
 Install RKNN-Toolkit2:
@@ -180,7 +180,7 @@ Convert bert:
 
 ```bash
 cd MeloTTS/scripts
-python3 convert_bert.py --onnx models/bert.onnx --out models/bert.rknn --seq 128 --target rk3588 --fp16 --opt 3 --verbose
+python3 convert_bert.py --onnx models/bert.onnx --out models/bert.rknn --seq 256 --target rk3588 --fp16 --opt 3 --verbose
 ```
 
 
@@ -260,11 +260,11 @@ Test MeloTTS with RKNN accelerator:
 Copy "bert.rknn", "encoder.rknn" & "decoder.rknn" from the Linux x86 PC into the MeloTTS/scripts/models folder, then run:
 
 ```bash
-python3 test_encoder_decoder_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --speed 1.1 --warmup 2 --speaker-id 1 --out out.wav
+python3 test_encoder_decoder_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --L 256 --chunk-T 256 --language EN --text "Did you ever hear a folk tale about a giant turtle?" --speed 1.1 --warmup 2 --speaker-id 1 --out out.wav
 ```
 
 ```bash
-python3 test_bert_encoder_decoder_rk3588.py --bert-rknn models/bert.rknn --bert-tokenizer bert-base-uncased --bert-seq 128 --speaker-id 1 --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav
+python3 test_bert_encoder_decoder_rk3588.py --bert-rknn models/bert.rknn --bert-tokenizer bert-base-uncased --bert-seq 256 --L 256 --chunk-T 256 --speaker-id 1 --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav
 ```
 
 ## Authors
