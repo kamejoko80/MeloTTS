@@ -267,6 +267,10 @@ python3 test_encoder_decoder_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn
 python3 test_bert_encoder_decoder_rk3588.py --bert-rknn models/bert.rknn --bert-tokenizer bert-base-uncased --bert-seq 256 --L 256 --chunk-T 256 --speaker-id 1 --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav
 ```
 
+```bash
+python3 test_melo_tts_web_server_rk3588.py --bert-rknn models/bert.rknn --bert-tokenizer bert-base-uncased --bert-seq 256 --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --L 256 --chunk-T 256 --idx-dtype int32 --core-mask 012 --host 0.0.0.0 --port 8000
+```
+
 ## Authors
 
 - [Wenliang Zhao](https://wl-zhao.github.io) at Tsinghua University
