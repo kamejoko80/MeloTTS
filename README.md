@@ -110,6 +110,13 @@ Test encoder:
 python3 test_encoder_decoder.py --encoder models/encoder.onnx --decoder models/decoder.onnx --language EN --text "Hello world, this should sound correct now." --speed 1.1 --out onnx_encoder_decoder.wav
 ```
 
+Export bert:
+
+```bash
+python3 export_bert.py --seq 128 --out models/bert.onnx
+```
+
+
 Install RKNN-Toolkit2:
 
 Must open a different linux terminal to install the RKNN-Toolkit2 on the Linux x86 desktop PC
@@ -156,13 +163,21 @@ pip install -r rknn-toolkit2/packages/x86_64/requirements_cp38-2.3.2.txt
 pip install rknn-toolkit2/packages/x86_64/rknn_toolkit2-2.3.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
 ```
 
-Covert ONNX to RKNN
+Covert encoder/decoder:
 
 ```bash
 cd MeloTTS/scripts
 python3 convert.py --onnx models/encoder.onnx --out models/encoder.rknn --target rk3588 --opt 3 --fp16 --verbose
 python3 convert.py --onnx models/decoder.onnx --out models/decoder.rknn --target rk3588 --opt 3 --fp16 --verbose
 ```
+
+Convert bert:
+
+```bash
+cd MeloTTS/scripts
+python3 convert_bert.py --onnx models/bert.onnx --out models/bert.rknn --seq 128 --target rk3588 --fp16 --opt 3 --verbose
+```
+
 
 ## Setup on RK3588:
 
@@ -237,12 +252,15 @@ python test_torch.py
 
 Test MeloTTS with RKNN accelerator:
 
-Copy "encoder.rknn" & "decoder.rknn" from the Linux x86 PC into the MeloTTS/scripts/models folder, then run:
+Copy "bert.rknn", "encoder.rknn" & "decoder.rknn" from the Linux x86 PC into the MeloTTS/scripts/models folder, then run:
 
 ```bash
-python3 test_melo_tts_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Hello world. RTF measurement on RK3588." --speed 1.1 --warmup 2 --speaker-id 1 --out rk3588_rtf.wav
+python3 test_encoder_decoder_rk3588.py --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --speed 1.1 --warmup 2 --speaker-id 1 --out out.wav
 ```
 
+```bash
+python3 test_bert_encoder_decoder_rk3588.py --bert-rknn models/bert.rknn --bert-tokenizer bert-base-uncased --bert-seq 128 --speaker-id 1 --enc-rknn models/encoder.rknn --dec-rknn models/decoder.rknn --language EN --text "Did you ever hear a folk tale about a giant turtle?" --out out.wav
+```
 
 ## Authors
 
